@@ -33,10 +33,11 @@ def screen_to_rgb():
 
     screen_image = capture_screen()
     downscaled_image = downscale_image(screen_image, TARGET_WIDTH, TARGET_HEIGHT)
-    
     # Get RGB values
     rgb_values = get_rgb_values(downscaled_image)
     return rgb_values
 
-if __name__ == "__main__":
-    main()
+#time.sleep(5)
+
+#print(screen_to_rgb())
+#np.savetxt("rgbFile2.txt", screen_to_rgb().reshape(screen_to_rgb().shape[0] * screen_to_rgb().shape[1], screen_to_rgb().shape[2]), fmt='%d', delimiter=',')
