@@ -5,22 +5,29 @@ import pyautogui
 import keyboard
 import time
 import random 
-import copy 
+import copy
+import os
 
 popsize = 100
 
-weight0 = np.empty((11, 100, 172800), dtype=np.float16)
-weight0[:] = np.random.uniform(-1.0, 1.0, size=weight0.shape)
-weight1 = np.random.uniform(-1.0, 1.0, (11, 100,100))
-weight2 = np.random.uniform(-1.0, 1.0, (11, 100,100)) 
-weight3 = np.random.uniform(-1.0, 1.0, (11, 12,100)) 
-weights = [weight0, weight1, weight2, weight3] 
+if os.path.exists("Weights.npz"):
+    weights = np.load("Weights.npz")
+    biases = np.load("Biases.npz")
+    weights = [weights[key] for key in weights.files]
+    biases = [biases[key] for key in biases.files]
+else:
+    weight0 = np.empty((11, 100, 172800), dtype=np.float16)
+    weight0[:] = np.random.uniform(-1.0, 1.0, size=weight0.shape)
+    weight1 = np.random.uniform(-1.0, 1.0, (11, 100,100))
+    weight2 = np.random.uniform(-1.0, 1.0, (11, 100,100)) 
+    weight3 = np.random.uniform(-1.0, 1.0, (11, 12,100)) 
+    weights = [weight0, weight1, weight2, weight3] 
 
-bias0 = np.random.uniform(-1.0, 1.0, (11, 100)) #I believe this might need to be np.random.random
-bias1 = np.random.uniform(-1.0, 1.0, (11, 100)) 
-bias2 = np.random.uniform(-1.0, 1.0, (11, 100)) 
-bias3 = np.random.uniform(-1.0, 1.0, (11, 12)) #12 controls: W, A, S, D, spacebar, Mouse up, down, left, right, LShift, Lclick, Rclick 
-biases = [bias0, bias1, bias2, bias3] 
+    bias0 = np.random.uniform(-1.0, 1.0, (11, 100)) #I believe this might need to be np.random.random
+    bias1 = np.random.uniform(-1.0, 1.0, (11, 100)) 
+    bias2 = np.random.uniform(-1.0, 1.0, (11, 100)) 
+    bias3 = np.random.uniform(-1.0, 1.0, (11, 12)) #12 controls: W, A, S, D, spacebar, Mouse up, down, left, right, LShift, Lclick, Rclick 
+    biases = [bias0, bias1, bias2, bias3]
 
 OBS_HOST = "localhost"
 OBS_PORT = 4455  # Default WebSocket port for OBS 28+
@@ -150,5 +157,9 @@ while True:
             for i in range(len(fitnesses)):
                 if timeToDie == fitnesses[i]:
                     for j in range(4):
-                        weights[j][i] = copy.deepcopy(weights[j][10])
-                        biases[j][i] = copy.deepcopy(biases[j][10])
+                        weights[j] = np.concatenate((weights[j][:i], np.reshape(weights[j][10], (1, np.shape(weights[j][10])[0], np.shape(weights[j][10])[1])),weights[j][i:-1]))
+                        biases[j] = np.concatenate((biases[j][:i], np.reshape(biases[j][10], (1, np.shape(biases[j][10])[0], np.shape(biases[j][10])[1])),biases[j][i:-1]))
+                        #np.concatenate is the correct thing to use here. The whole np.reshape is annoying, but it's very similar to making a list out of a number (e.g. 4 -> [4])
+            
+            np.savez("Weights.npz", *weights)
+            np.savez("Biases.npz", *biases)
