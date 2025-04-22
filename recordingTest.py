@@ -5,7 +5,6 @@ from obswebsocket import obsws, requests
 
 timeToDie = 0
 timeToDie = str(timeToDie)
-print(timeToDie)
 
 # OBS WebSocket Connection Settings
 OBS_HOST = "localhost"
@@ -40,7 +39,6 @@ def startRecording(ws):
         exit()
 
 # Allow recording for 5 seconds (adjust as needed)
-time.sleep(5)
 
 # Stop Recording
 def stopRecording(ws):
@@ -53,7 +51,6 @@ def stopRecording(ws):
         exit()
 
 # Wait a few seconds for OBS to finalize the file
-time.sleep(3)
 
 # Find the most recent recording file
 def renameFile(ws, MANUAL_RECORDING_PATH, NEW_FILENAME):
