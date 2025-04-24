@@ -1,0 +1,2 @@
+[24Apr2025 16:18:57.624] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: PencilLead2 was killed
+[24Apr2025 16:18:57.626] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] PencilLead2 was killed
