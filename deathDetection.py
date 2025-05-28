@@ -22,7 +22,7 @@ death_keywords = [
     "went off with a bang",
     "experienced kinetic energy",
     "froze to death",
-    "was frozen to death by"
+    "was frozen to death by",
     "died",
     "was killed",
     "discovered the floor was lava",
